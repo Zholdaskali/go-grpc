@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package example;
+
+option go_package = "github.com/zholdaskali/go_grpc/pkg/example";
+
+// CreatePostRequest - запрос CreatePost
+message CreatePostRequest {
+    // title - название поста
+    string title = 1;
+    // author_id - айди автора поста
+    string author_id = 2;
+    // content - содержание поста
+    string content = 3;
+}
+
+// CreatePostResponse - ответ CreatePost
+message CreatePostResponse {
+    // post_id - айди поста
+    uint64 post_id = 1;
+}
+
+message ListPostsRequest {}
+
+message ListPostsResponse {
+    repeated Post posts = 1;
+}
+
+message Post {
+    uint64 post_id = 1;
+    string title = 2;
+    string author_id = 3;
+    string content = 4;
+}

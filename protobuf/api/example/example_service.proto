@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package example;
+
+option go_package = "github.com/zholdaskali/go_grpc/pkg/example";
+
+import "api/example/messages.proto";
+
+// service Пример
+service Example {
+    // CreatePost - метод создания постов 
+    rpc CreatePost(CreatePostRequest) returns (CreatePostResponse) {}
+
+    // ListPosts - метод получения постов
+    rpc ListPosts(ListPostsRequest) returns (ListPostsResponse) {}
+}

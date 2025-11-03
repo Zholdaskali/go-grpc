@@ -1,0 +1,17 @@
+/bin
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.so
+*.dylib
+
+#  
+*.test
+*.out 
+
+go.work
+go.work.sum
+
+.env
+/bin
