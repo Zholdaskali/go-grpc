@@ -9,8 +9,10 @@ import (
 	"sync"
 
 	"buf.build/go/protovalidate"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 )
@@ -20,28 +22,36 @@ func WithProtoValidator() grpc.UnaryServerInterceptor {
 }
 
 func main() {
+
 	validator, err := protovalidate.New()
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	server := grpc.NewServer()
+
 	service := &ExampleService{
 		storage:   make(map[uint64]*Post, 1),
 		validator: validator,
 	}
+
 	example.RegisterExampleServer(server, service)
+
 	lis, err := net.Listen("tcp", ":8080")
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	reflection.Register(server)
+
 	log.Println("gRPC server started: 8080")
 
 	if err := server.Serve(lis); err != nil {
 		log.Fatal(err)
 	}
+
 }
 
 type Post struct {
@@ -60,8 +70,23 @@ type ExampleService struct {
 }
 
 func (s *ExampleService) CreatePost(ctx context.Context, req *example.CreatePostRequest) (*example.CreatePostResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		log.Println(md)
+	}
 	if err := s.validator.Validate(req); err != nil {
-		return nil, err
+
+		st := status.New(codes.InvalidArgument, codes.InvalidArgument.String())
+		st, _ = st.WithDetails(&errdetails.BadRequest{
+			FieldViolations: []*errdetails.BadRequest_FieldViolation{
+				{
+					Field:       "request",
+					Description: err.Error(),
+				},
+			},
+		})
+
+		return nil, st.Err()
 	}
 
 	id := rand.Uint64()
@@ -75,6 +100,11 @@ func (s *ExampleService) CreatePost(ctx context.Context, req *example.CreatePost
 
 	s.storage[id] = post
 	s.mx.Unlock()
+
+	header := metadata.Pairs("header-key", "val")
+	if err := grpc.SetHeader(ctx, header); err != nil {
+		//..
+	}
 
 	return &example.CreatePostResponse{
 		PostId: id,
