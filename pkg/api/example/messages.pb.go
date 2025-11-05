@@ -27,7 +27,7 @@ type CreatePostRequest struct {
 	// title - название поста
 	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	// author_id - айди автора поста
-	AuthorId string `protobuf:"bytes,2,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
+	AuthorId string `protobuf:"bytes,2,opt,name=author_id,proto3" json:"author_id,omitempty"`
 	// content - содержание поста
 	Content       string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -89,7 +89,7 @@ func (x *CreatePostRequest) GetContent() string {
 type CreatePostResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// post_id - айди поста
-	PostId        uint64 `protobuf:"varint,1,opt,name=post_id,json=postId,proto3" json:"post_id,omitempty"`
+	PostId        uint64 `protobuf:"varint,1,opt,name=post_id,proto3" json:"post_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -283,13 +283,13 @@ var File_api_example_messages_proto protoreflect.FileDescriptor
 
 const file_api_example_messages_proto_rawDesc = "" +
 	"\n" +
-	"\x1aapi/example/messages.proto\x12\aexample\"`\n" +
+	"\x1aapi/example/messages.proto\x12\aexample\"a\n" +
 	"\x11CreatePostRequest\x12\x14\n" +
-	"\x05title\x18\x01 \x01(\tR\x05title\x12\x1b\n" +
-	"\tauthor_id\x18\x02 \x01(\tR\bauthorId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\"-\n" +
-	"\x12CreatePostResponse\x12\x17\n" +
-	"\apost_id\x18\x01 \x01(\x04R\x06postId\"\x12\n" +
+	"\x05title\x18\x01 \x01(\tR\x05title\x12\x1c\n" +
+	"\tauthor_id\x18\x02 \x01(\tR\tauthor_id\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\".\n" +
+	"\x12CreatePostResponse\x12\x18\n" +
+	"\apost_id\x18\x01 \x01(\x04R\apost_id\"\x12\n" +
 	"\x10ListPostsRequest\"8\n" +
 	"\x11ListPostsResponse\x12#\n" +
 	"\x05posts\x18\x01 \x03(\v2\r.example.PostR\x05posts\"l\n" +
